@@ -25,3 +25,61 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ################################################################################
 
+include(ExternalProject)
+include(ProcessorCount)
+
+# Identify the number of cores we can use.
+ProcessorCount(N)
+if(NOT N EQUAL 0)
+    set(JOB_FLAGS -j${N})
+endif()
+
+# Binutils settings
+set(BINUTILS_URL "ftp://ftp.gnu.org/gnu/binutils/binutils-2.26.tar.bz2")
+set(BINUTILS_HASH "64146a0faa3b411ba774f47d41de239f")
+
+# Require GNU Make for building Autotools projects
+find_program(MAKE_EXECUTABLE make gmake)
+if(NOT MAKE_EXECUTABLE)
+	message(SEND_ERROR "GNU Make not found")
+endif()
+
+# Binutils target
+ExternalProject_Add(binutils
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}
+    INSTALL_DIR ${MARVELL_ROOT}
+    URL "${BINUTILS_URL}"
+    URL_HASH "MD5=${BINUTILS_HASH}"
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        --prefix=<INSTALL_DIR>
+        --target=armv7a-cros-linux-gnueabi
+        --disable-nls
+        --disable-shared
+        --disable-debug
+        --disable-dependency-tracking
+        --disable-werror
+        --disable-bootstrap
+        --disable-multilib
+        --enable-checking=release
+        --enable-lto
+        --enable-plugins
+        --enable-gold=yes
+        --enable-ld=default
+        --enable-poison-system-directories
+        --enable-install-libbfd
+        --enable-build-with-cxx
+        --enable-nlsi=no
+        "CFLAGS=-w -O2 ${TRAVIS_CFLAGS}"
+        "CXXFLAGS=-w -O2 ${TRAVIS_CXXFLAGS}"
+        ${AUTOCONF_ARGS}
+    BUILD_COMMAND ${MAKE_EXECUTABLE} ${JOB_FLAGS}
+    INSTALL_COMMAND ${MAKE_EXECUTABLE} install
+    LOG_DOWNLOAD ${ENABLE_LOG}
+    LOG_CONFIGURE ${ENABLE_LOG}
+    LOG_BUILD ${ENABLE_LOG}
+    LOG_INSTALL ${ENABLE_LOG}
+)
+
+# Cleanup
+set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "src")
+set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "tmp")

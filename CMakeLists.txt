@@ -35,6 +35,23 @@ project(SteamLinkSDK LANGUAGES NONE VERSION 0.0.1)
 
 option(ENABLE_TOOLCHAIN "Build the GCC toolchain" ON)
 
+set(ENABLE_LOG ON)
+
+if("$ENV{TRAVIS}" STREQUAL "true")
+    set(ENABLE_LOG OFF)
+
+    set(TRAVIS_CFLAGS "-fbracket-depth=512")
+    set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
+
+    if(APPLE)
+        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang")
+        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++")
+    elseif(UNIX)
+        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang-3.7")
+        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++-3.7")
+    endif()
+endif()
+
 if(ENABLE_TOOLCHAIN)
     add_subdirectory(toolchain)
 endif()
