@@ -1,17 +1,17 @@
 ################################################################################
 # Copyright (c) 2016, Symbitic
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
-# 
+#
 # * Redistributions in binary form must reproduce the above copyright notice,
 #   this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -47,6 +47,11 @@ set(BINUTILS_PATCH "${CMAKE_CURRENT_SOURCE_DIR}/patches/binutils-2.26.patch")
 set(LLVM_URL "http://llvm.org/releases/3.7.1/llvm-3.7.1.src.tar.xz")
 set(LLVM_HASH "bf8b3a2c79e61212c5409041dfdbd319")
 set(LLVM_PATCH "${CMAKE_CURRENT_SOURCE_DIR}/patches/llvm-3.7.1.patch")
+
+# Clang settings
+set(CLANG_URL "http://llvm.org/releases/3.7.1/cfe-3.7.1.src.tar.xz")
+set(CLANG_HASH "0acd026b5529164197563d135a8fd83e")
+set(CLANG_PATCH "${CMAKE_CURRENT_SOURCE_DIR}/patches/clang-3.7.1.patch")
 
 # Require GNU Make for building Autotools projects
 find_program(MAKE_EXECUTABLE make gmake)
@@ -137,6 +142,44 @@ ExternalProject_Add(llvm
         -DBUILD_SHARED_LIBS=OFF
         ${CMAKE_ARGS}
     CMAKE_GENERATOR "${LLVM_GENERATOR}"
+    LOG_DOWNLOAD ${ENABLE_LOG}
+    LOG_CONFIGURE ${ENABLE_LOG}
+    LOG_BUILD ${ENABLE_LOG}
+    LOG_INSTALL ${ENABLE_LOG}
+)
+
+ExternalProject_Get_Property(llvm binary_dir)
+set(LLVM_CONFIG_EXECUTABLE ${binary_dir}/bin/llvm-config)
+
+# Clang target
+ExternalProject_Add(clang
+    DEPENDS llvm
+    PREFIX ${CMAKE_CURRENT_BINARY_DIR}
+    INSTALL_DIR ${MARVELL_ROOT}
+    URL "${CLANG_URL}"
+    URL_HASH "MD5=${CLANG_HASH}"
+    PATCH_COMMAND ${PATCH_EXECUTABLE} --strip=1 --quiet
+        --input=${CLANG_PATCH} --directory=<SOURCE_DIR>
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+        -DCMAKE_PROGRAM_PATH=<INSTALL_DIR>/bin
+        -DCLANG_PLUGIN_SUPPORT=ON
+        -DCLANG_BUILD_EXAMPLES=OFF
+        -DCLANG_ENABLE_STATIC_ANALYZER=OFF
+        -DCLANG_ENABLE_ARCMT=OFF
+        -DCLANG_ENABLE_DIAGTOOL=OFF
+        -DCLANG_ENABLE_CLANGFORMAT=OFF
+        -DCLANG_ENABLE_CLANGFUZZER=OFF
+        -DCLANG_ENABLE_CINDEXTEST=OFF
+        -DLLVM_CONFIG=${LLVM_CONFIG_EXECUTABLE}
+        -DLLVM_INCLUDE_TESTS=OFF
+        -DLLVM_INCLUDE_DOCS=OFF
+        -DLLVM_INSTALL_TOOLCHAIN_ONLY=ON
+        -DGCC_INSTALL_PREFIX=<INSTALL_DIR>
+        ${CMAKE_ARGS}
+    CMAKE_GENERATOR "${CLANG_GENERATOR}"
     LOG_DOWNLOAD ${ENABLE_LOG}
     LOG_CONFIGURE ${ENABLE_LOG}
     LOG_BUILD ${ENABLE_LOG}
