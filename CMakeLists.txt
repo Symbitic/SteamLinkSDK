@@ -52,9 +52,9 @@ if("$ENV{TRAVIS}" STREQUAL "true")
     elseif(UNIX)
         # Use GCC 5 on Linux
         list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang-3.7")
-        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang-3.7")
+        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.7")
         list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang-3.7")
-        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang-3.7")
+        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++-3.7")
     endif()
 endif()
 
