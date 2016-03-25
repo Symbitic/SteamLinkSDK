@@ -33,7 +33,7 @@ set(MARVELL_ROOT "${CMAKE_CURRENT_BINARY_DIR}/install")
 
 project(SteamLinkSDK LANGUAGES NONE VERSION 0.0.1)
 
-option(ENABLE_TOOLCHAIN "Build the GCC toolchain" ON)
+option(ENABLE_TOOLCHAIN "Build the toolchain" ON)
 
 set(ENABLE_LOG ON)
 
@@ -44,15 +44,17 @@ if("$ENV{TRAVIS}" STREQUAL "true")
     set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
 
     if(APPLE)
+        # Use Clang on OSX
         list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang")
         list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++")
         list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang")
         list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++")
     elseif(UNIX)
-        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang-3.7")
-        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.7")
-        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang-3.7")
-        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++-3.7")
+        # Use GCC 5 on Linux
+        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/gcc-5")
+        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/gcc-5")
+        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/gcc-5")
+        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/g++-5")
     endif()
 endif()
 
