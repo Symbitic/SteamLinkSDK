@@ -34,7 +34,7 @@ os:
   - osx
 
 compiler:
-  - clang
+  - gcc
 
 cache:
   - apt
@@ -56,7 +56,6 @@ addons:
     packages:
       - cmake
       - cmake-data
-      - clang-3.6
       - ninja-build
       - build-essential
       - texinfo

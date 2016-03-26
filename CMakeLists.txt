@@ -42,18 +42,6 @@ if("$ENV{TRAVIS}" STREQUAL "true")
 
     set(TRAVIS_CFLAGS "-fbracket-depth=512")
     set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
-
-    if(APPLE)
-        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang")
-        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++")
-        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang")
-        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++")
-    elseif(UNIX)
-        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang-3.6")
-        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.6")
-        list(APPEND AUTOCONF_ARGS "CC=/usr/bin/clang-3.6")
-        list(APPEND AUTOCONF_ARGS "CXX=/usr/bin/clang++-3.6")
-    endif()
 endif()
 
 if(ENABLE_TOOLCHAIN)
