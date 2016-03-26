@@ -40,8 +40,10 @@ set(ENABLE_LOG ON)
 if("$ENV{TRAVIS}" STREQUAL "true")
     set(ENABLE_LOG OFF)
 
-    set(TRAVIS_CFLAGS "-fbracket-depth=512")
-    set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
+    if(APPLE)
+        set(TRAVIS_CFLAGS "-fbracket-depth=512")
+        set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
+    endif()
 endif()
 
 if(ENABLE_TOOLCHAIN)
