@@ -34,7 +34,7 @@ os:
   - osx
 
 compiler:
-  - gcc
+  - clang
 
 cache:
   - apt
@@ -52,13 +52,13 @@ addons:
     sources:
       - george-edison55-precise-backports
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.6
+      - llvm-toolchain-precise-3.7
     packages:
       - cmake
       - cmake-data
       - ninja-build
+      - clang-3.7
       - build-essential
-      - gcc-5
       - texinfo
       - libgmp-dev
       - libmpfr-dev
