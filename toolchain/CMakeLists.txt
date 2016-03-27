@@ -27,6 +27,6 @@
 
 set(PATCH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/patches")
 
-add_subdirectory(binutils)
+#add_subdirectory(binutils)
 add_subdirectory(llvm)
 add_subdirectory(clang)

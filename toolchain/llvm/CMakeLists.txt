@@ -53,7 +53,7 @@ endif()
 
 # LLVM target
 ExternalProject_Add(llvm
-    DEPENDS binutils
+    #DEPENDS binutils
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}
     INSTALL_DIR ${MARVELL_ROOT}
     URL "${LLVM_URL}"
