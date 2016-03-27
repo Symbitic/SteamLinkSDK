@@ -58,6 +58,7 @@ addons:
       - cmake-data
       - ninja-build
       - build-essential
+      - gcc-5
       - texinfo
       - libgmp-dev
       - libmpfr-dev
