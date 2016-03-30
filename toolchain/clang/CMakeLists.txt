@@ -44,9 +44,10 @@ if(NOT PATCH_EXECUTABLE)
 endif()
 
 # Use Ninja when available.
-find_program(NINJA_EXECUTABLE ninja)
+#find_program(NINJA_EXECUTABLE ninja)
 if(NINJA_EXECUTABLE)
-    set(CLANG_GENERATOR "Ninja")
+    #set(CLANG_GENERATOR "Ninja")
+    set(CLANG_GENERATOR "Unix Makefiles")
 else()
     set(CLANG_GENERATOR "Unix Makefiles")
 endif()
