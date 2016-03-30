@@ -35,21 +35,20 @@ project(SteamLinkSDK LANGUAGES NONE VERSION 0.0.1)
 
 option(ENABLE_TOOLCHAIN "Build the toolchain" ON)
 
-set(ENABLE_LOG ON)
-
 if("$ENV{TRAVIS}" STREQUAL "true")
     set(ENABLE_LOG OFF)
+else()
+    set(ENABLE_LOG ON)
+endif()
 
-    if(APPLE)
-        set(TRAVIS_CFLAGS "-fbracket-depth=512")
-        set(TRAVIS_CXXFLAGS "-fbracket-depth=512")
-    elseif(UNIX)
-        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang-3.7")
-        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.7")
-    endif()
+if(APPLE)
+    list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang")
+    list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++")
+elseif(UNIX)
+    list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/clang-3.7")
+    list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-3.7")
 endif()
 
 if(ENABLE_TOOLCHAIN)
     add_subdirectory(toolchain)
 endif()
-
