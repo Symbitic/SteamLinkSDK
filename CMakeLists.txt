@@ -41,7 +41,7 @@ if("$ENV{TRAVIS}" STREQUAL "true")
     set(ENABLE_LOG OFF)
     if(NOT APPLE)
         list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/gcc-5")
-        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/g++-5")
+        list(APPEND CMAKE_ARGS "-DCMAKE_CXX_COMPILER=/usr/bin/g++-5")
     endif()
 endif()
 
