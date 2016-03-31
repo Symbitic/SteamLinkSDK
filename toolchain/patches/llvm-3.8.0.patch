@@ -1,0 +1,112 @@
+diff -burN llvm-3.8.0/cmake/config-ix.cmake llvm-3.8.0-arm/cmake/config-ix.cmake
+--- llvm-3.8.0/cmake/config-ix.cmake	2016-03-31 09:27:56.605559643 -0500
++++ llvm-3.8.0-arm/cmake/config-ix.cmake	2016-03-31 09:30:36.654570529 -0500
+@@ -519,9 +519,10 @@
+ endif()
+ 
+ set(LLVM_BINDINGS "")
+-if(WIN32)
++if(LLVM_ENABLE_BINDINGS)
++  if(WIN32)
+   message(STATUS "Go bindings disabled.")
+-else()
++  else()
+   find_program(GO_EXECUTABLE NAMES go DOC "go executable")
+   if(GO_EXECUTABLE STREQUAL "GO_EXECUTABLE-NOTFOUND")
+     message(STATUS "Go bindings disabled.")
+@@ -535,6 +536,9 @@
+       message(STATUS "Go bindings disabled, need at least Go 1.2.")
+     endif()
+   endif()
++  endif()
++else()
++  message(STATUS "Go bindings disabled.")
+ endif()
+ 
+ find_program(GOLD_EXECUTABLE NAMES ${LLVM_DEFAULT_TARGET_TRIPLE}-ld.gold ld.gold ${LLVM_DEFAULT_TARGET_TRIPLE}-ld ld DOC "The gold linker")
+@@ -545,11 +549,12 @@
+   find_program(LD64_EXECUTABLE NAMES ld DOC "The ld64 linker")
+ endif()
+ 
+-include(FindOCaml)
+-include(AddOCaml)
+-if(WIN32)
++if(LLVM_ENABLE_BINDINGS)
++  include(FindOCaml)
++  include(AddOCaml)
++  if(WIN32)
+   message(STATUS "OCaml bindings disabled.")
+-else()
++  else()
+   find_package(OCaml)
+   if( NOT OCAML_FOUND )
+     message(STATUS "OCaml bindings disabled.")
+@@ -567,6 +572,9 @@
+       endif()
+     endif()
+   endif()
++  endif()
++else()
++  message(STATUS "OCaml bindings disabled.")
+ endif()
+ 
+ string(REPLACE " " ";" LLVM_BINDINGS_LIST "${LLVM_BINDINGS}")
+diff -burN llvm-3.8.0/CMakeLists.txt llvm-3.8.0-arm/CMakeLists.txt
+--- llvm-3.8.0/CMakeLists.txt	2016-03-31 09:27:58.729573064 -0500
++++ llvm-3.8.0-arm/CMakeLists.txt	2016-03-31 09:31:26.662886223 -0500
+@@ -353,6 +353,8 @@
+   "Build the LLVM tools. If OFF, just generate build targets." ON)
+ 
+ option(LLVM_INCLUDE_UTILS "Generate build targets for the LLVM utils." ON)
++option(LLVM_BUILD_UTILS
++  "Build the LLVM utils. If OFF, just generate build targets." ON)
+ 
+ option(LLVM_BUILD_RUNTIME
+   "Build the LLVM runtime libraries." ON)
+@@ -370,6 +372,7 @@
+ option (LLVM_ENABLE_DOXYGEN "Use doxygen to generate llvm API documentation." OFF)
+ option (LLVM_ENABLE_SPHINX "Use Sphinx to generate llvm documentation." OFF)
+ 
++option (LLVM_ENABLE_BINDINGS "Generate language bindings for Go, OCaml, etc." ON)
+ option (LLVM_BUILD_EXTERNAL_COMPILER_RT
+   "Build compiler-rt as an external project." OFF)
+ 
+diff -burN llvm-3.8.0/tools/CMakeLists.txt llvm-3.8.0-arm/tools/CMakeLists.txt
+--- llvm-3.8.0/tools/CMakeLists.txt	2016-03-31 09:27:58.769573317 -0500
++++ llvm-3.8.0-arm/tools/CMakeLists.txt	2016-03-31 09:43:20.979390875 -0500
+@@ -30,6 +30,35 @@
+   set(LLVM_TOOL_LLVM_LTO_BUILD Off)
+ endif()
+ 
++if(LLVM_INSTALL_TOOLCHAIN_ONLY)
++  set(LLVM_TOOL_BUGPOINT_NAME Off)
++  set(LLVM_TOOL_BUGPOINT_PASSES_NAME Off)
++  set(LLVM_TOOL_DSYMUTIL_NAME Off)
++  set(LLVM_TOOL_LLVM_AS_FUZZER_NAME Off)
++  set(LLVM_TOOL_LLVM_AS_PARASITIC_COVERAGE_REPRO_NAME Off)
++  set(LLVM_TOOL_LLVM_BCANALYZER_NAME Off)
++  set(LLVM_TOOL_LLVM_C_TEST_NAME Off)
++  set(LLVM_TOOL_LLVM_CXXDUMP_NAME Off)
++  set(LLVM_TOOL_LLVM_DIFF_NAME Off)
++  set(LLVM_TOOL_LLVM_DIS_NAME Off)
++  set(LLVM_TOOL_LLVM_DWARFDUMP_NAME Off)
++  set(LLVM_TOOL_LLVM_DWP_NAME Off)
++  set(LLVM_TOOL_LLVM_EXTRACT_NAME Off)
++  set(LLVM_TOOL_LLVM_GO_NAME Off)
++  set(LLVM_TOOL_LLVM_JITLISTENER_NAME Off)
++  set(LLVM_TOOL_LLVM_MC_FUZZER_NAME Off)
++  set(LLVM_TOOL_LLVM_MCMARKUP_NAME Off)
++  set(LLVM_TOOL_LLVM_PDBDUMP_NAME Off)
++  set(LLVM_TOOL_LLVM_RTDYLD_NAME Off)
++  set(LLVM_TOOL_LLVM_SHLIB_NAME Off)
++  set(LLVM_TOOL_LLVM_SIZE_NAME Off)
++  set(LLVM_TOOL_LLVM_SPLIT_NAME Off)
++  set(LLVM_TOOL_LLVM_STRESS_NAME Off)
++  set(LLVM_TOOL_LLVM_SYMBOLIZER_NAME Off)
++  set(LLVM_TOOL_LLVM_VTABLEDUMP_NAME Off)
++  set(LLVM_TOOL_YAML2OBJ_NAME Off)
++endif()
++
+ # Add LTO, llvm-ar, llvm-config, and llvm-profdata before clang, ExternalProject
+ # requires targets specified in DEPENDS to exist before the call to
+ # ExternalProject_Add.

@@ -34,7 +34,7 @@ os:
   - osx
 
 compiler:
-  - clang
+  - gcc
 
 cache:
   - apt
@@ -44,7 +44,7 @@ notifications:
     recipients:
       - alex.shaw.as@gmail.com
     on_success: change
-    on_failure: always
+    on_failure: change
     on_start: never
 
 addons:
@@ -52,12 +52,10 @@ addons:
     sources:
       - george-edison55-precise-backports
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.7
     packages:
       - cmake
       - cmake-data
       - ninja-build
-      - clang-3.7
       - build-essential
       - texinfo
       - libgmp-dev

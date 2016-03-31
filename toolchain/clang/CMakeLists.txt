@@ -33,9 +33,9 @@ ProcessorCount(CLANG_PARALLEL_COMPILE_JOBS)
 ProcessorCount(CLANG_PARALLEL_LINK_JOBS)
 
 # Clang settings
-set(CLANG_URL "http://llvm.org/releases/3.7.1/cfe-3.7.1.src.tar.xz")
-set(CLANG_HASH "0acd026b5529164197563d135a8fd83e")
-set(CLANG_PATCH "${PATCH_DIR}/clang-3.7.1.patch")
+set(CLANG_URL "http://llvm.org/releases/3.8.0/cfe-3.8.0.src.tar.xz")
+set(CLANG_HASH "cc99e7019bb74e6459e80863606250c5")
+set(CLANG_PATCH "${PATCH_DIR}/clang-3.8.0.patch")
 
 # Require GNU Patch for patching downloaded sources
 find_program(PATCH_EXECUTABLE patch gpatch)
@@ -44,10 +44,9 @@ if(NOT PATCH_EXECUTABLE)
 endif()
 
 # Use Ninja when available.
-#find_program(NINJA_EXECUTABLE ninja)
+find_program(NINJA_EXECUTABLE ninja)
 if(NINJA_EXECUTABLE)
-    #set(CLANG_GENERATOR "Ninja")
-    set(CLANG_GENERATOR "Unix Makefiles")
+    set(CLANG_GENERATOR "Ninja")
 else()
     set(CLANG_GENERATOR "Unix Makefiles")
 endif()

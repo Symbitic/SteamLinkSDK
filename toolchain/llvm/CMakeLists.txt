@@ -33,9 +33,9 @@ ProcessorCount(LLVM_PARALLEL_COMPILE_JOBS)
 ProcessorCount(LLVM_PARALLEL_LINK_JOBS)
 
 # LLVM settings
-set(LLVM_URL "http://llvm.org/releases/3.7.1/llvm-3.7.1.src.tar.xz")
-set(LLVM_HASH "bf8b3a2c79e61212c5409041dfdbd319")
-set(LLVM_PATCH "${PATCH_DIR}/llvm-3.7.1.patch")
+set(LLVM_URL "http://llvm.org/releases/3.8.0/llvm-3.8.0.src.tar.xz")
+set(LLVM_HASH "07a7a74f3c6bd65de4702bf941b511a0")
+set(LLVM_PATCH "${PATCH_DIR}/llvm-3.8.0.patch")
 
 # Require GNU Patch for patching downloaded sources
 find_program(PATCH_EXECUTABLE patch gpatch)
