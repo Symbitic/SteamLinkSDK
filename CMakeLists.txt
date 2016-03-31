@@ -35,10 +35,14 @@ project(SteamLinkSDK LANGUAGES NONE VERSION 0.0.1)
 
 option(ENABLE_TOOLCHAIN "Build the toolchain" ON)
 
+set(ENABLE_LOG ON)
+
 if("$ENV{TRAVIS}" STREQUAL "true")
     set(ENABLE_LOG OFF)
-else()
-    set(ENABLE_LOG ON)
+    if(NOT APPLE)
+        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/gcc-5")
+        list(APPEND CMAKE_ARGS "-DCMAKE_C_COMPILER=/usr/bin/g++-5")
+    endif()
 endif()
 
 if(ENABLE_TOOLCHAIN)
