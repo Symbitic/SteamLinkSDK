@@ -27,7 +27,7 @@
 
 language: c
 
-sudo: false
+sudo: true
 
 os:
   - linux
